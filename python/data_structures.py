@@ -1,3 +1,36 @@
+# Quick Sort
+def partition(array, start, end):
+    pivot = start
+
+    for i in xrange(start+1, end+1):
+        if array[i] <= array[start]:
+            pivot += 1
+            array[i], array[pivot] = array[pivot], array[i]
+    
+    array[pivot], array[start] = array[start], array[pivot]
+
+    return pivot
+
+def quicksort(array, start=0, end=None):
+    if end is None:
+        end = len(array) - 1
+        
+    def _quicksort(array, start, end):
+
+        if start >= end:
+            return
+
+        pivot = partition(array, start, end)
+        _quicksort(array, start, pivot-1)
+        _quicksort(array, pivot+1, end)
+        
+    _quicksort(array, start, end)
+
+    return array
+
+
+print quicksort([213123, 12, 1212, 24, 252, 5, 45])
+
 # Dynamic programming fibonacci
 def fib(n):
     if n in [0, 1]:
@@ -244,3 +277,34 @@ print "---"
 pre_order_traversal(b)
 print "---"
 post_order_traversal(b)
+
+
+# Basic Hash Table
+def calculate_index(key):
+    return hash(key) % 2048
+    
+    
+class HashTable:
+    
+    def __init__(self):
+        self.list = [None] * 2048
+        
+    def put(self, key, value):
+        index = calculate_index(key)
+        self.list[index] = value
+        
+    def get(self, key):
+        index = calculate_index(key)
+        return self.list[index]
+        
+    def remove(self, key):
+        index = calculate_index(key)
+        self.list[index] = None
+        
+        
+h = HashTable()
+h.put("abc", 123)
+h.put("def", 456)
+
+print h.get("abc")
+print h.get("def")
