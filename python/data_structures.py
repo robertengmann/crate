@@ -308,3 +308,59 @@ h.put("def", 456)
 
 print h.get("abc")
 print h.get("def")
+
+
+# Buy and Sell stock only once
+# Maximum profit between buy and sell
+example = [310, 315, 275, 295, 260, 270, 290, 230, 255, 250]
+
+def buy_and_sell_stock_once(stock_prices):
+    maximum_profit = 0
+    
+    for i in xrange(0, len(stock_prices)):
+        current_price = stock_prices[i]
+        
+        for j in xrange(i+1, len(stock_prices)):
+            next_price = stock_prices[j]
+            profit = next_price - current_price
+            
+            if profit > maximum_profit:
+                maximum_profit = profit
+                
+    return maximum_profit
+                
+
+def buy_and_sell_stock_once_fast(stock_prices):
+    min_price, max_profit = float('inf'), 0.0
+    
+    for price in stock_prices:
+        max_profit_sell_today = price - min_price
+        max_profit = max(max_profit, max_profit_sell_today)
+        min_price = min(min_price, price)
+    
+    return max_profit
+        
+
+print buy_and_sell_stock_once(example)
+print buy_and_sell_stock_once_fast(example)
+
+
+# Is Palindrome
+import re
+
+def is_palindrome(s):
+    regex = re.compile('[^a-z]')
+    clean_string = regex.sub('', s.lower())
+    i = 0
+    j = len(clean_string) - 1
+    
+    while i < j:
+        if clean_string[i] != clean_string[j]:
+            return False
+        
+        i = i + 1
+        j = j - 1
+        
+    return True
+    
+print is_palindrome("Able was I, ere I saw Elba!")
