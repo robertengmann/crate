@@ -27,7 +27,7 @@ tree *find_minimum(tree *t) {
   tree *min;
   min = t;
 
-  while(t->left != NULL) {
+  while(min->left != NULL) {
     min = min->left;
   }
 
@@ -40,38 +40,58 @@ tree *find_maximum(tree *t) {
   tree *max;
   max = t;
 
-  while(t->right != NULL) {
+  while(max->right != NULL) {
     max = max->right;
   }
 
   return max;
 }
 
-void insert_tree(tree **l, int x, tree *parent) {
+tree *insert_tree(tree *l, int x, tree *parent) {
   tree *p;
 
-  if(*l == NULL) {
+  if(l == NULL) {
     p = malloc(sizeof(tree));
     p->item = x;
     p->left = p->right = NULL;
     p->parent = parent;
-    *l = p;
-    return;
+    l = p;
+    return l;
   }
 
-  if(x < (*l)->item) {
-    insert_tree(&((*l)->left), x, *l);
+  if(x < l->item) {
+    l->left = insert_tree(l->left, x, l);
   } else {
-    insert_tree(&((*l)->right), x, *l);
+    l->right = insert_tree(l->right, x, l);
   }
+
+  return l;
+}
+
+void print_tree(tree *t) {
+  if(t == NULL) return;
+
+  printf("%i\n", t->item);
+  print_tree(t->left);
+  print_tree(t->right);
 }
 
 int main(int argc, char *argv[]) {
 
-  tree **t = NULL;
-  insert_tree(t, 1, NULL);
-  insert_tree(t, 8, NULL);
-  insert_tree(t, 9, NULL);
+  tree *t = NULL;
+
+  for(int i = 1; i <= 12; i++) {
+    t = insert_tree(t, i, NULL);
+  }
+  
+  printf("Tree:\n");
+  print_tree(t);
+
+  tree *min = find_minimum(t);
+  tree *max = find_maximum(t);
+
+  printf("Min: %i\n", min->item);
+  printf("Max: %i\n", max->item);
 
   return 0;
 }
